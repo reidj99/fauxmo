@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 # For a complete discussion, see http://www.makermusings.com
 
+import os
 import email.utils
 import requests
 import select
@@ -365,12 +366,12 @@ class rest_api_handler(object):
         self.off_cmd = off_cmd
 
     def on(self):
-        r = requests.get(self.on_cmd)
-        return r.status_code == 200
+        os.system(self.on_cmd)
+        return 200
 
     def off(self):
-        r = requests.get(self.off_cmd)
-        return r.status_code == 200
+        os.system(self.off_cmd)
+        return 200
 
 
 # Each entry is a list with the following elements:
@@ -384,8 +385,9 @@ class rest_api_handler(object):
 # list will be used.
 
 FAUXMOS = [
-    ['office lights', rest_api_handler('http://192.168.5.4/ha-api?cmd=on&a=office', 'http://192.168.5.4/ha-api?cmd=off&a=office')],
-    ['kitchen lights', rest_api_handler('http://192.168.5.4/ha-api?cmd=on&a=kitchen', 'http://192.168.5.4/ha-api?cmd=off&a=kitchen')],
+    ['TV', rest_api_handler('irsend -d /var/run/lirc/lircd SEND_ONCE TV power', 'irsend -d /var/run/lirc/lircd SEND_ONCE TV power')],
+    ['Stereo', rest_api_handler('irsend -d /var/run/lirc/lircd SEND_ONCE STEREO power', 'irsend -d /var/run/lirc/lircd SEND_ONCE STEREO power')],
+    ['Netflix', rest_api_handler('google-chrome --new-window www.netflix.com &', 'irsend -d /var/run/lirc/lircd SEND_ONCE TV power')],
 ]
 
 
